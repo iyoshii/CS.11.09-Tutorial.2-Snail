@@ -26,7 +26,50 @@ public class Snail {
      *         returns an empty array if array2d is not square.
      */
     public static int[] flattenSnail(int[][] array2d) {
-        return null;
+        if (array2d == null || !isPerfectSquare(array2d)) {
+            return new int[0];
+        }
+
+        int length = array2d.length;
+        int[] result = new int[length * length];
+
+        int index = 0;
+        int rowStart = 0;
+        int rowEnd = length - 1;
+        int colStart = 0;
+        int colEnd = length - 1;
+
+        while (rowStart <= rowEnd && colStart <= colEnd) {
+            for (int col = colStart; col <= colEnd; col++) {
+                result[index++] = array2d[rowStart][col];
+            }
+
+            rowStart++;
+
+            for (int i = rowStart; i <= rowEnd; i++) {
+                result[index++] = array2d[i][colEnd];
+            }
+
+            colEnd--;
+
+            if (rowStart <= rowEnd) {
+                for (int i = colEnd; i >= colStart; i--) {
+                    result[index++] = array2d[rowEnd][i];
+                }
+
+                rowEnd--;
+            }
+
+            if (colStart <= colEnd) {
+                for (int i = rowEnd; i >= rowStart; i--) {
+                    result[index++] = array2d[i][colStart];
+                }
+
+                colStart++;
+            }
+        }
+
+        return result;
     }
 
     /**
@@ -58,8 +101,56 @@ public class Snail {
      *         returns an empty 2d array if the length of array1d is not a perfect square.
      */
     public static int[][] makeSnail(int[] array1d) {
-        return null;
+        if (array1d == null || !isPerfectSquare(array1d)) {
+            return new int[0][0];
+        }
+
+        int length = (int) Math.sqrt(array1d.length);
+        int[][] result = new int[length][length];
+
+        int index = 0;
+        int rowStart = 0;
+        int rowEnd = length - 1;
+        int colStart = 0;
+        int colEnd = length - 1;
+
+        for (int[] row : result) {
+            if (rowStart <= rowEnd) {
+                for (int i = colStart; i <= colEnd; i++) {
+                    row[i] = array1d[index++];
+                }
+
+                rowStart++;
+            }
+
+            for (int i = rowStart; i <= rowEnd; i++) {
+                result[i][colEnd] = array1d[index++];
+            }
+
+            colEnd--;
+
+            if (rowStart <= rowEnd) {
+                int[] bottomRow = result[rowEnd];
+
+                for (int i = colEnd; i >= colStart; i--) {
+                    bottomRow[i] = array1d[index++];
+                }
+
+                rowEnd--;
+            }
+
+            if (colStart <= colEnd) {
+                for (int i = rowEnd; i >= rowStart; i--) {
+                    result[i][colStart] = array1d[index++];
+                }
+
+                colStart++;
+            }
+        }
+
+        return result;
     }
+
 
     /**
      *
@@ -71,7 +162,11 @@ public class Snail {
      * @param array1d
      */
     private static void print1dArray(int[] array1d) {
+        for(int num : array1d){
+            System.out.println(num + " ");
+        }
 
+        System.out.println();
     }
 
     /**
@@ -84,7 +179,13 @@ public class Snail {
      * @param array2d
      */
     private static void print2dArray(int[][] array2d) {
+        for(int[] row : array2d){
+            for(int num : row){
+                System.out.println(num + " ");
+            }
 
+            System.out.println();
+        }
     }
 
     /**
@@ -97,9 +198,9 @@ public class Snail {
      * @return
      */
     private static boolean isPerfectSquare(int[] array1d) {
-        return false;
+        int sqrt = (int) Math.sqrt(array1d.length);
+        return sqrt * sqrt == array1d.length;
     }
-
 
     /**
      *
@@ -111,8 +212,12 @@ public class Snail {
      * @return
      */
     private static boolean isPerfectSquare(int[][] array2d) {
-        return false;
+        for (int[] nums : array2d) {
+            if (nums.length != array2d.length) {
+                return false;
+            }
+        }
+
+        return true;
     }
-
-
 }
